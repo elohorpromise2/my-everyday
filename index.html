@@ -1,0 +1,1391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#17213f">
+    <meta name="description"
+        content="My Everyday — a personal space to plan, learn, grow and stay connected.">
+    <meta name="author" content="Promise Elohor">
+
+    <title>My Everyday</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Website stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Website JavaScript -->
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+                <div>
+                    <h1>My Everyday</h1>
+                    <p>Your personal space</p>
+                </div>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-avatar">M</div>
+                <div class="profile-details">
+                    <strong id="sidebarDisplayName">My Space</strong>
+                    <span>Make today meaningful</span>
+                </div>
+            </div>
+
+            <nav class="main-navigation" aria-label="Main navigation">
+
+                <p class="nav-heading">WORKSPACE</p>
+
+                <button class="nav-link active" type="button" data-page="today">
+                    <span>◷</span> Today
+                </button>
+
+                <button class="nav-link" type="button" data-page="planner">
+                    <span>▦</span> Planner
+                </button>
+
+                <button class="nav-link" type="button" data-page="timetable">
+                    <span>▤</span> Weekly Timetable
+                </button>
+
+                <p class="nav-heading">PERSONAL GROWTH</p>
+
+                <button class="nav-link" type="button" data-page="school">
+                    <span>▣</span> School
+                </button>
+
+                <button class="nav-link" type="button" data-page="spiritual">
+                    <span>✧</span> Spiritual Growth
+                </button>
+
+                <button class="nav-link" type="button" data-page="goals">
+                    <span>◎</span> My Goals
+                </button>
+
+                <p class="nav-heading">CONNECTIONS</p>
+
+                <button class="nav-link" type="button" data-page="people">
+                    <span>♧</span> People & Birthdays
+                </button>
+
+                <button class="nav-link" type="button" data-page="partner">
+                    <span>♡</span> Message Your Partner
+                </button>
+
+                <p class="nav-heading">MY SPACE</p>
+
+                <button class="nav-link" type="button" data-page="journal">
+                    <span>▧</span> Journal
+                </button>
+
+                <button class="nav-link" type="button" data-page="settings">
+                    <span>⚙</span> Settings
+                </button>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <p>One day at a time.</p>
+                <span>MY EVERYDAY ✦</span>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+                    <button class="menu-button" id="menuButton"
+                        type="button" aria-label="Open navigation">
+                        ☰
+                    </button>
+
+                    <div>
+                        <p class="topbar-label">YOUR PERSONAL DASHBOARD</p>
+                        <h2 id="pageTitle">Today</h2>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <span class="current-date" id="currentDate"></span>
+                    <button class="notification-button" id="notificationButton"
+                        type="button" aria-label="Enable notifications">
+                        ♧
+                    </button>
+                </div>
+
+            </header>
+
+
+            <!-- MESSAGE / ALERT AREA -->
+            <div class="message-area" id="message"
+                role="status" aria-live="polite"></div>
+
+
+            <!-- =====================================
+                 TODAY DASHBOARD
+            ====================================== -->
+            <section class="page-section active" id="today">
+
+                <div class="welcome-banner">
+                    <div>
+                        <p class="welcome-label">A NEW DAY, A NEW OPPORTUNITY</p>
+                        <h2 id="welcomeHeading">Welcome to My Everyday ✨</h2>
+                        <p>
+                            Make space for what matters.
+                            Plan your day, take small steps and keep growing.
+                        </p>
+                    </div>
+
+                    <div class="welcome-decoration">✦</div>
+                </div>
+
+
+                <!-- DASHBOARD STATISTICS -->
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+                        <div class="stat-icon purple">▦</div>
+                        <div>
+                            <p>Today's Activities</p>
+                            <h3 id="todayActivityCount">0</h3>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon blue">✓</div>
+                        <div>
+                            <p>Completed Tasks</p>
+                            <h3 id="completedTaskCount">0</h3>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon violet">▣</div>
+                        <div>
+                            <p>Assignments</p>
+                            <h3 id="assignmentCount">0</h3>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon cyan">◎</div>
+                        <div>
+                            <p>Active Goals</p>
+                            <h3 id="goalCount">0</h3>
+                        </div>
+                    </article>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+                <div class="section-heading">
+                    <div>
+                        <p class="section-eyebrow">GET STARTED</p>
+                        <h3>Quick Actions</h3>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+
+                    <button class="quick-action-card" type="button" data-go="planner">
+                        <span class="quick-icon">＋</span>
+                        <strong>Plan an Activity</strong>
+                        <small>Add something to your day</small>
+                    </button>
+
+                    <button class="quick-action-card" type="button" data-go="school">
+                        <span class="quick-icon">▣</span>
+                        <strong>Add Assignment</strong>
+                        <small>Keep track of schoolwork</small>
+                    </button>
+
+                    <button class="quick-action-card" type="button" data-go="journal">
+                        <span class="quick-icon">▧</span>
+                        <strong>Write in Journal</strong>
+                        <small>Record your thoughts</small>
+                    </button>
+
+                    <button class="quick-action-card" type="button" data-go="goals">
+                        <span class="quick-icon">◎</span>
+                        <strong>Set a Goal</strong>
+                        <small>Work towards something</small>
+                    </button>
+
+                </div>
+
+
+                <!-- TODAY'S ACTIVITIES -->
+                <div class="dashboard-grid">
+
+                    <section class="content-card">
+                        <div class="section-heading">
+                            <div>
+                                <p class="section-eyebrow">YOUR SCHEDULE</p>
+                                <h3>Today's Activities</h3>
+                            </div>
+                            <button class="text-button" type="button" data-go="planner">
+                                View all →
+                            </button>
+                        </div>
+
+                        <div id="todayActivities" class="dashboard-list">
+                            <p class="empty-state">Your activities will appear here.</p>
+                        </div>
+                    </section>
+
+
+                    <!-- REMINDERS -->
+                    <section class="content-card">
+                        <div class="section-heading">
+                            <div>
+                                <p class="section-eyebrow">DON'T FORGET</p>
+                                <h3>Upcoming Reminders</h3>
+                            </div>
+                        </div>
+
+                        <div id="todayReminders" class="dashboard-list">
+                            <p class="empty-state">Your reminders will appear here.</p>
+                        </div>
+                    </section>
+
+                </div>
+
+
+                <!-- UPCOMING BIRTHDAYS -->
+                <section class="content-card dashboard-card">
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">IMPORTANT PEOPLE</p>
+                            <h3>Upcoming Birthdays</h3>
+                        </div>
+
+                        <button class="text-button" type="button" data-go="people">
+                            View people →
+                        </button>
+                    </div>
+
+                    <div id="upcomingBirthdays" class="dashboard-list">
+                        <p class="empty-state">Your upcoming birthdays will appear here.</p>
+                    </div>
+                </section>
+
+
+                <!-- INSPIRATION -->
+                <section class="inspiration-card">
+                    <span class="inspiration-icon">✧</span>
+                    <p class="section-eyebrow">A LITTLE REMINDER</p>
+                    <h3 id="inspirationText">
+                        Progress is still progress, even when it is small.
+                    </h3>
+                    <p>Keep showing up for yourself.</p>
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 PLANNER
+            ====================================== -->
+            <section class="page-section" id="planner">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">ORGANISE YOUR TIME</p>
+                    <h3>Your Personal Planner</h3>
+                    <p>Create activities, organise your day and keep track of your tasks.</p>
+                </div>
+
+
+                <section class="content-card form-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <h3>Add an Activity</h3>
+                            <p>Plan something you want to do.</p>
+                        </div>
+                    </div>
+
+                    <form id="activityForm">
+
+                        <input type="hidden" id="activityId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+                                <label for="activityTitle">Activity title</label>
+                                <input type="text" id="activityTitle"
+                                    placeholder="What do you need to do?" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityDate">Date</label>
+                                <input type="date" id="activityDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityTime">Time</label>
+                                <input type="time" id="activityTime">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityCategory">Category</label>
+                                <select id="activityCategory">
+                                    <option value="Personal">Personal</option>
+                                    <option value="School">School</option>
+                                    <option value="Spiritual">Spiritual</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Family">Family</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityPriority">Priority</label>
+                                <select id="activityPriority">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Important">Important</option>
+                                    <option value="Urgent">Urgent</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="activityNotes">Notes</label>
+                                <textarea id="activityNotes"
+                                    rows="3" placeholder="Add extra details..."></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="activitySubmit">
+                                Save Activity
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="activityCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">YOUR PLANS</p>
+                            <h3>My Activities</h3>
+                        </div>
+
+                        <input type="search" id="activitySearch"
+                            class="search-input" placeholder="Search activities...">
+                    </div>
+
+                    <div id="activityList" class="record-list">
+                        <p class="empty-state">No activities added yet.</p>
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 WEEKLY TIMETABLE
+            ====================================== -->
+            <section class="page-section" id="timetable">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">YOUR WEEK AT A GLANCE</p>
+                    <h3>Weekly Timetable</h3>
+                    <p>Organise your classes, activities and regular commitments.</p>
+                </div>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Add to Timetable</h3>
+
+                    <form id="timetableForm">
+
+                        <input type="hidden" id="timetableId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="timetableDay">Day</label>
+                                <select id="timetableDay" required>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="timetableSubject">Activity or Subject</label>
+                                <input type="text" id="timetableSubject"
+                                    placeholder="e.g. Web Development" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="timetableStart">Start time</label>
+                                <input type="time" id="timetableStart" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="timetableEnd">End time</label>
+                                <input type="time" id="timetableEnd" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="timetableLocation">Location or Notes</label>
+                                <input type="text" id="timetableLocation"
+                                    placeholder="Where will this take place?">
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="timetableSubmit">
+                                Save Timetable Entry
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="timetableCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">YOUR ROUTINE</p>
+                            <h3>My Weekly Schedule</h3>
+                        </div>
+                    </div>
+
+                    <div id="timetableList" class="record-list">
+                        <p class="empty-state">Your timetable will appear here.</p>
+                    </div>
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 SCHOOL
+            ====================================== -->
+            <section class="page-section" id="school">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">LEARNING & EDUCATION</p>
+                    <h3>My School</h3>
+                    <p>Keep your courses, assignments and academic responsibilities organised.</p>
+                </div>
+
+
+                <!-- COURSES -->
+                <section class="content-card form-card">
+
+                    <h3>Add a Course</h3>
+
+                    <form id="courseForm">
+
+                        <input type="hidden" id="courseId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="courseName">Course name</label>
+                                <input type="text" id="courseName"
+                                    placeholder="Course title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="courseCode">Course code</label>
+                                <input type="text" id="courseCode"
+                                    placeholder="e.g. WDD231" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="courseCredits">Credits</label>
+                                <input type="number" id="courseCredits"
+                                    min="0" max="20" value="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="courseStatus">Status</label>
+                                <select id="courseStatus">
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Planned">Planned</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="courseSubmit">
+                                Save Course
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="courseCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">YOUR LEARNING</p>
+                            <h3>My Courses</h3>
+                        </div>
+                    </div>
+
+                    <div id="courseList" class="record-list">
+                        <p class="empty-state">Your courses will appear here.</p>
+                    </div>
+
+                </section>
+
+
+                <!-- ASSIGNMENTS -->
+                <section class="content-card form-card">
+
+                    <h3>Add an Assignment</h3>
+
+                    <form id="assignmentForm">
+
+                        <input type="hidden" id="assignmentId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+                                <label for="assignmentTitle">Assignment title</label>
+                                <input type="text" id="assignmentTitle"
+                                    placeholder="Enter assignment title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assignmentCourse">Course</label>
+                                <input type="text" id="assignmentCourse"
+                                    placeholder="Course name or code">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assignmentDate">Due date</label>
+                                <input type="date" id="assignmentDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assignmentStatus">Status</label>
+                                <select id="assignmentStatus">
+                                    <option value="Not Started">Not Started</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assignmentPriority">Priority</label>
+                                <select id="assignmentPriority">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Important">Important</option>
+                                    <option value="Urgent">Urgent</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="assignmentNotes">Notes</label>
+                                <textarea id="assignmentNotes"
+                                    rows="3" placeholder="Assignment details..."></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="assignmentSubmit">
+                                Save Assignment
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="assignmentCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">DEADLINES & TASKS</p>
+                            <h3>My Assignments</h3>
+                        </div>
+                    </div>
+
+                    <div id="assignmentList" class="record-list">
+                        <p class="empty-state">Your assignments will appear here.</p>
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 SPIRITUAL GROWTH
+            ====================================== -->
+            <section class="page-section" id="spiritual">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">FAITH & PERSONAL REFLECTION</p>
+                    <h3>Spiritual Growth</h3>
+                    <p>Make room for prayer, scripture study, reflection and meaningful moments.</p>
+                </div>
+
+
+                <section class="inspiration-card spiritual-banner">
+                    <span class="inspiration-icon">✧</span>
+                    <h3>Make time for what strengthens your spirit.</h3>
+                    <p>Small daily efforts can become meaningful habits.</p>
+                </section>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Record a Spiritual Moment</h3>
+
+                    <form id="spiritualForm">
+
+                        <input type="hidden" id="spiritualId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="spiritualType">Activity type</label>
+                                <select id="spiritualType">
+                                    <option value="Prayer">Prayer</option>
+                                    <option value="Scripture Study">Scripture Study</option>
+                                    <option value="Church">Church</option>
+                                    <option value="Institute">Institute</option>
+                                    <option value="Temple">Temple</option>
+                                    <option value="Reflection">Personal Reflection</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="spiritualDate">Date</label>
+                                <input type="date" id="spiritualDate" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="spiritualTitle">Title or Scripture</label>
+                                <input type="text" id="spiritualTitle"
+                                    placeholder="What did you study or experience?">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="spiritualContent">Reflection and Notes</label>
+                                <textarea id="spiritualContent" rows="5"
+                                    placeholder="Write what you learned, felt or want to remember..."
+                                    required></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="spiritualSubmit">
+                                Save Reflection
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="spiritualCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">YOUR JOURNEY</p>
+                            <h3>My Spiritual Records</h3>
+                        </div>
+                    </div>
+
+                    <div id="spiritualList" class="record-list">
+                        <p class="empty-state">Your spiritual records will appear here.</p>
+                    </div>
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 PEOPLE & BIRTHDAYS
+            ====================================== -->
+            <section class="page-section" id="people">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">STAY CONNECTED</p>
+                    <h3>People & Birthdays</h3>
+                    <p>Remember important people, their special dates and the little things that matter.</p>
+                </div>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Add Someone to Your People List</h3>
+
+                    <form id="peopleForm">
+
+                        <input type="hidden" id="personId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="personName">Full name</label>
+                                <input type="text" id="personName"
+                                    placeholder="Enter their name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personRelationship">Relationship</label>
+                                <select id="personRelationship">
+                                    <option value="Family">Family</option>
+                                    <option value="Friend">Friend</option>
+                                    <option value="Partner">Partner</option>
+                                    <option value="Classmate">Classmate</option>
+                                    <option value="Church">Church</option>
+                                    <option value="Mentor">Mentor</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personBirthday">Birthday</label>
+                                <input type="date" id="personBirthday">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personPhone">Phone number</label>
+                                <input type="tel" id="personPhone"
+                                    placeholder="Phone number">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personEmail">Email address</label>
+                                <input type="email" id="personEmail"
+                                    placeholder="Email address">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personContactMethod">Preferred contact method</label>
+                                <select id="personContactMethod">
+                                    <option value="">Choose one</option>
+                                    <option value="Call">Phone call</option>
+                                    <option value="Text">Text message</option>
+                                    <option value="WhatsApp">WhatsApp</option>
+                                    <option value="Email">Email</option>
+                                    <option value="In Person">In person</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="personAddress">Address or Location</label>
+                                <input type="text" id="personAddress"
+                                    placeholder="Optional address or location">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personContactTime">Best time to contact</label>
+                                <input type="text" id="personContactTime"
+                                    placeholder="e.g. Evenings">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personFrequency">How often to keep in touch</label>
+                                <select id="personFrequency">
+                                    <option value="">Choose frequency</option>
+                                    <option value="Daily">Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Occasionally">Occasionally</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personLastContacted">Last contacted</label>
+                                <input type="date" id="personLastContacted">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personReminder">Contact reminder</label>
+                                <select id="personReminder">
+                                    <option value="None">No reminder</option>
+                                    <option value="Daily">Daily</option>
+                                    <option value="Weekly">Weekly</option>
+                                    <option value="Monthly">Monthly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personReminderTime">Reminder time</label>
+                                <input type="time" id="personReminderTime">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personBirthdayReminder">Birthday reminder</label>
+                                <select id="personBirthdayReminder">
+                                    <option value="Yes">Remind me</option>
+                                    <option value="No">No reminder</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="personImportantDates">Other important dates</label>
+                                <input type="text" id="personImportantDates"
+                                    placeholder="Anniversary, special occasion, etc.">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="personNotes">Personal notes</label>
+                                <textarea id="personNotes" rows="4"
+                                    placeholder="Things to remember about this person..."></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="personSubmit">
+                                Save Person
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="personCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">SPECIAL MOMENTS</p>
+                            <h3>Upcoming Birthdays</h3>
+                        </div>
+                    </div>
+
+                    <div id="peopleBirthdays" class="record-list">
+                        <p class="empty-state">Your saved birthdays will appear here.</p>
+                    </div>
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">YOUR CONTACTS</p>
+                            <h3>My People</h3>
+                        </div>
+
+                        <input type="search" id="peopleSearch"
+                            class="search-input" placeholder="Search people...">
+                    </div>
+
+                    <div id="peopleList" class="record-list">
+                        <p class="empty-state">You haven't added anyone yet.</p>
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 PARTNER MESSAGES
+            ====================================== -->
+            <section class="page-section" id="partner">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">WORDS THAT MATTER</p>
+                    <h3>Message Your Partner</h3>
+                    <p>Keep meaningful messages, thoughtful words and special reminders in one place.</p>
+                </div>
+
+
+                <section class="inspiration-card partner-banner">
+                    <span class="inspiration-icon">♡</span>
+                    <h3>Sometimes, a few thoughtful words can mean a lot.</h3>
+                    <p>Create messages you can save and revisit whenever you need them.</p>
+                </section>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Create a Message</h3>
+
+                    <form id="partnerMessageForm">
+
+                        <input type="hidden" id="partnerMessageId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="partnerMessageType">Message category</label>
+                                <select id="partnerMessageType">
+                                    <option value="Everyday">Everyday Message</option>
+                                    <option value="Appreciation">Appreciation</option>
+                                    <option value="Encouragement">Encouragement</option>
+                                    <option value="Apology">Apology</option>
+                                    <option value="Birthday">Birthday</option>
+                                    <option value="Special Occasion">Special Occasion</option>
+                                    <option value="Important">Important Message</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="partnerMessageTone">Message tone</label>
+                                <select id="partnerMessageTone">
+                                    <option value="Sweet">Sweet</option>
+                                    <option value="Friendly">Friendly</option>
+                                    <option value="Thoughtful">Thoughtful</option>
+                                    <option value="Funny">Funny</option>
+                                    <option value="Serious">Serious</option>
+                                    <option value="Romantic">Romantic</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="partnerMessageTitle">Message title</label>
+                                <input type="text" id="partnerMessageTitle"
+                                    placeholder="Give your message a title" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="partnerMessageContent">Your message</label>
+                                <textarea id="partnerMessageContent" rows="6"
+                                    placeholder="Write your message here..."
+                                    required></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit"
+                                id="partnerMessageSubmit">
+                                Save Message
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="partnerMessageCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">SAVED WORDS</p>
+                            <h3>My Messages</h3>
+                        </div>
+
+                        <input type="search" id="partnerMessageSearch"
+                            class="search-input" placeholder="Search messages...">
+                    </div>
+
+                    <div id="partnerMessageList" class="record-list">
+                        <p class="empty-state">Your saved messages will appear here.</p>
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 JOURNAL
+            ====================================== -->
+            <section class="page-section" id="journal">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">YOUR PERSONAL SPACE</p>
+                    <h3>My Journal</h3>
+                    <p>A place to write your thoughts, record experiences and remember your journey.</p>
+                </div>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Write a Journal Entry</h3>
+
+                    <form id="journalForm">
+
+                        <input type="hidden" id="journalId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+                                <label for="journalTitle">Entry title</label>
+                                <input type="text" id="journalTitle"
+                                    placeholder="Give this entry a title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="journalDate">Date</label>
+                                <input type="date" id="journalDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="journalMood">How are you feeling?</label>
+                                <select id="journalMood">
+                                    <option value="Happy">Happy</option>
+                                    <option value="Grateful">Grateful</option>
+                                    <option value="Peaceful">Peaceful</option>
+                                    <option value="Excited">Excited</option>
+                                    <option value="Thoughtful">Thoughtful</option>
+                                    <option value="Tired">Tired</option>
+                                    <option value="Sad">Sad</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="journalContent">Your thoughts</label>
+                                <textarea id="journalContent" rows="8"
+                                    placeholder="Write freely. This is your space..."
+                                    required></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="journalSubmit">
+                                Save Journal Entry
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="journalCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">YOUR MEMORIES</p>
+                            <h3>Journal Entries</h3>
+                        </div>
+                    </div>
+
+                    <div id="journalList" class="record-list">
+                        <p class="empty-state">Your journal entries will appear here.</p>
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 GOALS
+            ====================================== -->
+            <section class="page-section" id="goals">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">DREAMS, PLANS & ACTIONS</p>
+                    <h3>My Goals</h3>
+                    <p>Set meaningful goals, track your progress and celebrate each step forward.</p>
+                </div>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Create a Goal</h3>
+
+                    <form id="goalForm">
+
+                        <input type="hidden" id="goalId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+                                <label for="goalTitle">Goal title</label>
+                                <input type="text" id="goalTitle"
+                                    placeholder="What do you want to achieve?" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goalCategory">Category</label>
+                                <select id="goalCategory">
+                                    <option value="Personal">Personal</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Spiritual">Spiritual</option>
+                                    <option value="Career">Career</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Financial">Financial</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goalDeadline">Target date</label>
+                                <input type="date" id="goalDeadline">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goalProgress">Progress (%)</label>
+                                <input type="number" id="goalProgress"
+                                    min="0" max="100" value="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goalStatus">Status</label>
+                                <select id="goalStatus">
+                                    <option value="Not Started">Not Started</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="goalNotes">Goal details</label>
+                                <textarea id="goalNotes" rows="4"
+                                    placeholder="Why is this goal important to you?"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit" id="goalSubmit">
+                                Save Goal
+                            </button>
+                            <button class="secondary-button" type="button"
+                                id="goalCancel" hidden>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="content-card">
+
+                    <div class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">KEEP MOVING FORWARD</p>
+                            <h3>My Goals & Progress</h3>
+                        </div>
+                    </div>
+
+                    <div id="goalList" class="record-list">
+                        <p class="empty-state">Your goals will appear here.</p>
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =====================================
+                 SETTINGS
+            ====================================== -->
+            <section class="page-section" id="settings">
+
+                <div class="page-intro">
+                    <p class="section-eyebrow">MAKE IT YOUR OWN</p>
+                    <h3>Settings</h3>
+                    <p>Personalise your My Everyday experience and manage your data.</p>
+                </div>
+
+
+                <section class="content-card form-card">
+
+                    <h3>Personal Preferences</h3>
+
+                    <form id="settingsForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="displayName">Your display name</label>
+                                <input type="text" id="displayName"
+                                    placeholder="Enter your name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="weekStart">First day of the week</label>
+                                <select id="weekStart">
+                                    <option value="Monday">Monday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit">
+                                Save Settings
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- NOTIFICATIONS -->
+                <section class="content-card">
+
+                    <h3>Notifications & Reminders</h3>
+
+                    <p class="settings-description">
+                        Enable browser notifications to receive reminders while this
+                        website is open and your browser allows them.
+                    </p>
+
+                    <button class="secondary-button" id="enableNotifications"
+                        type="button">
+                        Enable Notifications
+                    </button>
+
+                    <p class="settings-status" id="notificationStatus">
+                        Notifications have not been enabled.
+                    </p>
+
+                </section>
+
+
+                <!-- BACKUP AND RESTORE -->
+                <section class="content-card">
+
+                    <h3>Backup & Restore</h3>
+
+                    <p class="settings-description">
+                        Download a backup of your saved information or restore
+                        information from a previous backup.
+                    </p>
+
+                    <div class="settings-actions">
+
+                        <button class="secondary-button" id="exportData"
+                            type="button">
+                            ↓ Download Backup
+                        </button>
+
+                        <label class="secondary-button file-upload-button">
+                            ↑ Restore Backup
+                            <input type="file" id="importData"
+                                accept=".json,application/json" hidden>
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+                <!-- DATA MANAGEMENT -->
+                <section class="content-card danger-card">
+
+                    <h3>Data Management</h3>
+
+                    <p class="settings-description">
+                        You can permanently clear the information saved in this
+                        browser for My Everyday.
+                    </p>
+
+                    <button class="danger-button" id="deleteAllData"
+                        type="button">
+                        Delete All My Data
+                    </button>
+
+                </section>
+
+
+                <!-- ABOUT -->
+                <section class="content-card about-card">
+
+                    <div class="about-logo">✦</div>
+                    <h3>My Everyday</h3>
+                    <p>A personal space to plan, learn, grow and stay connected.</p>
+                    <span>Made with care.</span>
+
+                </section>
+
+            </section>
+
+
+            <!-- FOOTER -->
+            <footer class="app-footer">
+                <p>My Everyday ✦</p>
+                <p>One day at a time. <span id="footerYear"></span></p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
