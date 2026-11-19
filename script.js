@@ -1,4 +1,3 @@
-
 "use strict";
 
 /* =========================================================
@@ -231,11 +230,6 @@ function loadData() {
                 loaded[property] = [];
             }
         });
-
-        /*
-           Upgrade older saved contact records.
-           Older versions may have used personContact.
-        */
 
         loaded.people = loaded.people.map(person => ({
             ...person,
@@ -2115,8 +2109,119 @@ listen("settingsForm", "submit", event => {
 
 
 /* =========================================================
-   27. BROWSER NOTIFICATIONS
+   27. PWA INSTALLATION AND SERVICE WORKER
 ========================================================= */
+
+let serviceWorkerRegistration = null;
+let deferredInstallPrompt = null;
+
+async function registerServiceWorker() {
+    if (!("serviceWorker" in navigator)) {
+        console.warn("Service workers are not supported.");
+        return null;
+    }
+
+    try {
+        await navigator.serviceWorker.register("./service-worker.js", {
+            scope: "./"
+        });
+
+        serviceWorkerRegistration = await navigator.serviceWorker.ready;
+
+        console.log("My Everyday service worker is ready.");
+
+        return serviceWorkerRegistration;
+
+    } catch (error) {
+        console.error("Service worker registration failed:", error);
+        return null;
+    }
+}
+
+window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+
+    const installButton = $("installAppButton");
+
+    if (installButton) {
+        installButton.hidden = false;
+        installButton.textContent = "Install App";
+    }
+});
+
+async function installMyEveryday() {
+    const isInstalled =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    if (isInstalled) {
+        showMessage("My Everyday is already installed.");
+        return;
+    }
+
+    if (deferredInstallPrompt) {
+        try {
+            deferredInstallPrompt.prompt();
+
+            const result = await deferredInstallPrompt.userChoice;
+
+            if (result.outcome === "accepted") {
+                showMessage("My Everyday installation accepted.");
+            }
+
+            deferredInstallPrompt = null;
+
+        } catch (error) {
+            console.error("App installation failed:", error);
+            showMessage("App installation could not be started.", "error");
+        }
+
+        return;
+    }
+
+    const isAppleMobile =
+        /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+    if (isAppleMobile) {
+        window.alert(
+            "To install My Everyday:\n\n" +
+            "1. Open this website in Safari.\n" +
+            "2. Tap the Share button.\n" +
+            "3. Select Add to Home Screen.\n" +
+            "4. Tap Add."
+        );
+
+        return;
+    }
+
+    window.alert(
+        "To install My Everyday, open your browser menu and look for " +
+        "'Install My Everyday', 'Install app', or 'Add to Home Screen'."
+    );
+}
+
+listen("installAppButton", "click", installMyEveryday);
+
+window.addEventListener("appinstalled", () => {
+    const installButton = $("installAppButton");
+
+    if (installButton) {
+        installButton.hidden = true;
+    }
+
+    deferredInstallPrompt = null;
+
+    showMessage("My Everyday has been installed successfully.");
+});
+
+
+/* =========================================================
+   28. BROWSER NOTIFICATIONS
+========================================================= */
+
+let notificationCheckRunning = false;
 
 function notificationSupported() {
     return "Notification" in window;
@@ -2128,7 +2233,6 @@ async function enableNotifications() {
             "Your browser does not support notifications.",
             "error"
         );
-
         return;
     }
 
@@ -2143,17 +2247,27 @@ async function enableNotifications() {
 
             showMessage("Notifications enabled.");
 
-            sendDueNotifications();
+            if (!serviceWorkerRegistration) {
+                await registerServiceWorker();
+            }
 
-        } else {
+            await sendDueNotifications();
+
+        } else if (permission === "denied") {
             setText(
                 "notificationStatus",
-                "Notifications are currently blocked by your browser."
+                "Notifications are blocked. Change this in your browser settings."
             );
 
             showMessage(
                 "Please allow notifications in your browser settings.",
                 "error"
+            );
+
+        } else {
+            setText(
+                "notificationStatus",
+                "Notification permission has not been granted."
             );
         }
 
@@ -2170,8 +2284,11 @@ async function enableNotifications() {
 listen("enableNotifications", "click", enableNotifications);
 listen("notificationButton", "click", enableNotifications);
 
-function sendBrowserNotification(title, body, key) {
-    if (!notificationSupported() || Notification.permission !== "granted") {
+async function sendBrowserNotification(title, body, key) {
+    if (
+        !notificationSupported() ||
+        Notification.permission !== "granted"
+    ) {
         return;
     }
 
@@ -2180,9 +2297,19 @@ function sendBrowserNotification(title, body, key) {
     }
 
     try {
-        new Notification(title, {
-            body
-        });
+        if (serviceWorkerRegistration) {
+            await serviceWorkerRegistration.showNotification(title, {
+                body,
+                icon: "./icons/icon-192.png",
+                badge: "./icons/icon-192.png",
+                data: {
+                    url: "./"
+                }
+            });
+
+        } else {
+            new Notification(title, { body });
+        }
 
         data.notified.push(key);
         saveData();
@@ -2192,58 +2319,75 @@ function sendBrowserNotification(title, body, key) {
     }
 }
 
-function sendDueNotifications() {
-    if (!notificationSupported() || Notification.permission !== "granted") {
+async function sendDueNotifications() {
+    if (
+        !notificationSupported() ||
+        Notification.permission !== "granted" ||
+        notificationCheckRunning
+    ) {
         return;
     }
 
-    const today = todayString();
-    const now = new Date();
-    const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    notificationCheckRunning = true;
 
-    data.activities.forEach(activity => {
-        if (
-            !activity.completed &&
-            activity.date === today &&
-            (!activity.time || activity.time <= currentTime)
-        ) {
-            sendBrowserNotification(
-                "My Everyday Reminder",
-                `Activity: ${activity.title}`,
-                `activity-${activity.id}-${today}`
-            );
-        }
-    });
+    try {
+        const today = todayString();
+        const now = new Date();
 
-    data.assignments.forEach(assignment => {
-        if (
-            assignment.status !== "Completed" &&
-            assignment.date === today
-        ) {
-            sendBrowserNotification(
-                "Assignment Due Today",
-                assignment.title,
-                `assignment-${assignment.id}-${today}`
-            );
-        }
-    });
+        const currentTime =
+            `${String(now.getHours()).padStart(2, "0")}:` +
+            `${String(now.getMinutes()).padStart(2, "0")}`;
 
-    data.people.forEach(person => {
-        if (
-            person.birthday &&
-            person.birthdayReminder !== "No"
-        ) {
-            const nextBirthday = getNextBirthday(person.birthday);
-
-            if (nextBirthday && nextBirthday.days === 0) {
-                sendBrowserNotification(
-                    "Birthday Reminder",
-                    `Today is ${person.name}'s birthday!`,
-                    `birthday-${person.id}-${today}`
+        // Activity reminders
+        for (const activity of data.activities) {
+            if (
+                !activity.completed &&
+                activity.date === today &&
+                (!activity.time || activity.time <= currentTime)
+            ) {
+                await sendBrowserNotification(
+                    "My Everyday Reminder",
+                    `Activity: ${activity.title}`,
+                    `activity-${activity.id}-${today}`
                 );
             }
         }
-    });
+
+        // Assignment reminders
+        for (const assignment of data.assignments) {
+            if (
+                assignment.status !== "Completed" &&
+                assignment.date === today
+            ) {
+                await sendBrowserNotification(
+                    "Assignment Due Today",
+                    assignment.title,
+                    `assignment-${assignment.id}-${today}`
+                );
+            }
+        }
+
+        // Birthday reminders
+        for (const person of data.people) {
+            if (
+                person.birthday &&
+                person.birthdayReminder !== "No"
+            ) {
+                const nextBirthday = getNextBirthday(person.birthday);
+
+                if (nextBirthday && nextBirthday.days === 0) {
+                    await sendBrowserNotification(
+                        "Birthday Reminder",
+                        `Today is ${person.name}'s birthday!`,
+                        `birthday-${person.id}-${today}`
+                    );
+                }
+            }
+        }
+
+    } finally {
+        notificationCheckRunning = false;
+    }
 }
 
 function updateNotificationStatus() {
@@ -2252,7 +2396,6 @@ function updateNotificationStatus() {
             "notificationStatus",
             "Your browser does not support notifications."
         );
-
         return;
     }
 
@@ -2265,7 +2408,7 @@ function updateNotificationStatus() {
     } else if (Notification.permission === "denied") {
         setText(
             "notificationStatus",
-            "Notifications are blocked. You can change this in your browser settings."
+            "Notifications are blocked. Change this in your browser settings."
         );
 
     } else {
@@ -2278,7 +2421,7 @@ function updateNotificationStatus() {
 
 
 /* =========================================================
-   28. BACKUP AND RESTORE
+   29. BACKUP AND RESTORE
 ========================================================= */
 
 listen("exportData", "click", () => {
@@ -2393,7 +2536,7 @@ listen("importData", "change", event => {
 
 
 /* =========================================================
-   29. DELETE ALL SAVED DATA
+   30. DELETE ALL SAVED DATA
 ========================================================= */
 
 listen("deleteAllData", "click", () => {
@@ -2430,7 +2573,7 @@ function resetAllForms() {
 
 
 /* =========================================================
-   30. RENDER ALL SECTIONS
+   31. RENDER ALL SECTIONS
 ========================================================= */
 
 function renderAll() {
@@ -2459,7 +2602,7 @@ function renderAll() {
 
 
 /* =========================================================
-   31. INITIALISE DEFAULT FORM DATES
+   32. INITIALISE DEFAULT FORM DATES
 ========================================================= */
 
 function initialiseFormDates() {
@@ -2471,17 +2614,46 @@ function initialiseFormDates() {
 
 
 /* =========================================================
-   32. START THE APPLICATION
+   33. START THE APPLICATION
 ========================================================= */
 
-function initialiseApp() {
+async function initialiseApp() {
     initialiseFormDates();
 
     renderAll();
 
     updatePersonalDisplay();
 
+    // Register the service worker.
+    await registerServiceWorker();
+
+    // Hide the install button if the app is already installed.
+    const installButton = $("installAppButton");
+
+    const isInstalled =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    if (installButton && isInstalled) {
+        installButton.hidden = true;
+    }
+
+    // Check reminders when the application starts.
     sendDueNotifications();
+
+    // Check reminders every minute while the application is open.
+    setInterval(() => {
+        sendDueNotifications();
+    }, 60 * 1000);
+
+    // Check reminders when the user returns to the application.
+    window.addEventListener("focus", sendDueNotifications);
+
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+            sendDueNotifications();
+        }
+    });
 
     console.log("My Everyday is ready.");
 }
